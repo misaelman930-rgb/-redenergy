@@ -849,6 +849,111 @@ html.js h2.in { animation: h2glow 4.5s ease-in-out infinite; }
   .game-grid { grid-template-columns: 1fr; }
 }
 
+/* ---------- системные требования ---------- */
+.req {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--panel), #101216);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+.req-head,
+.req-row {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr 1.25fr;
+  align-items: center;
+}
+.req-head {
+  background: var(--panel-2);
+  border-bottom: 1px solid var(--line);
+  font-family: 'Russo One', 'Arial Black', sans-serif;
+  font-style: italic;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+}
+.req-head span {
+  padding: 14px 20px;
+  color: var(--dim);
+}
+.req-head .req-col-rec {
+  color: var(--white);
+  background: linear-gradient(90deg, rgba(230, 41, 41, 0.18), rgba(230, 41, 41, 0.04));
+  border-left: 1px solid rgba(230, 41, 41, 0.35);
+}
+.req-row {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  transition: background 0.3s;
+}
+.req-row:last-child { border-bottom: none; }
+.req-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--red);
+  transform: scaleY(0);
+  transition: transform 0.35s var(--ease);
+}
+.req-row:hover { background: rgba(230, 41, 41, 0.05); }
+.req-row:hover::before { transform: scaleY(1); }
+.req-row > span {
+  padding: 15px 20px;
+  font-size: 0.97rem;
+  line-height: 1.45;
+}
+.req-label {
+  font-family: 'Russo One', 'Arial Black', sans-serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--dim);
+}
+.req-min { color: var(--ink); }
+.req-rec {
+  color: var(--white);
+  background: rgba(230, 41, 41, 0.06);
+  border-left: 1px solid rgba(230, 41, 41, 0.25);
+}
+
+/* строки появляются по очереди, когда блок попадает в экран */
+html.js .req .req-row {
+  opacity: 0;
+  transform: translateX(-12px);
+}
+html.js .req.in .req-row {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease), background 0.3s;
+  transition-delay: calc(var(--i) * 0.07s);
+}
+
+@media (max-width: 640px) {
+  .req-head { display: none; }
+  .req-row {
+    grid-template-columns: 1fr;
+  }
+  .req-row > span { padding: 10px 18px; }
+  .req-label { padding-top: 16px !important; color: var(--red); }
+  .req-min::before,
+  .req-rec::before {
+    content: attr(data-label);
+    display: block;
+    font-family: 'Russo One', 'Arial Black', sans-serif;
+    font-style: italic;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+    margin-bottom: 2px;
+  }
+  .req-rec { border-left: none; border-top: 1px dashed var(--line); }
+}
+
 /* Уважаем настройку «уменьшить движение» */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1027,6 +1132,47 @@ html.js h2.in { animation: h2glow 4.5s ease-in-out infinite; }
       <tr><td>Язык</td><td>Русский</td></tr>
       <tr><td>Управление</td><td>Мышь</td></tr>
     </table>
+  </section>
+
+  <section>
+    <h2 class="reveal">Системные требования</h2>
+    <div class="req reveal" role="table" aria-label="Системные требования">
+      <div class="req-head" role="row">
+        <span role="columnheader"></span>
+        <span role="columnheader" class="req-col-min">Минимальные</span>
+        <span role="columnheader" class="req-col-rec">Рекомендуемые</span>
+      </div>
+      <div class="req-row" role="row" style="--i:0">
+        <span class="req-label" role="rowheader">ОС</span>
+        <span class="req-min" role="cell" data-label="Минимальные">Windows 10 (64 bit)</span>
+        <span class="req-rec" role="cell" data-label="Рекомендуемые">Windows 10/11 (64 bit)</span>
+      </div>
+      <div class="req-row" role="row" style="--i:1">
+        <span class="req-label" role="rowheader">Процессор</span>
+        <span class="req-min" role="cell" data-label="Минимальные">AMD FX-4300</span>
+        <span class="req-rec" role="cell" data-label="Рекомендуемые">Intel Core i3</span>
+      </div>
+      <div class="req-row" role="row" style="--i:2">
+        <span class="req-label" role="rowheader">Оперативная память</span>
+        <span class="req-min" role="cell" data-label="Минимальные">2 ГБ</span>
+        <span class="req-rec" role="cell" data-label="Рекомендуемые">6 ГБ</span>
+      </div>
+      <div class="req-row" role="row" style="--i:3">
+        <span class="req-label" role="rowheader">Видеокарта</span>
+        <span class="req-min" role="cell" data-label="Минимальные">NVIDIA GeForce GTX 550 Ti</span>
+        <span class="req-rec" role="cell" data-label="Рекомендуемые">NVIDIA GeForce RTX 1050 Ti</span>
+      </div>
+      <div class="req-row" role="row" style="--i:4">
+        <span class="req-label" role="rowheader">Сеть</span>
+        <span class="req-min" role="cell" data-label="Минимальные">Широкополосный интернет (для онлайна)</span>
+        <span class="req-rec" role="cell" data-label="Рекомендуемые">Широкополосный интернет (для онлайна)</span>
+      </div>
+      <div class="req-row" role="row" style="--i:5">
+        <span class="req-label" role="rowheader">Место на диске</span>
+        <span class="req-min" role="cell" data-label="Минимальные">1 ГБ (HDD или SSD)</span>
+        <span class="req-rec" role="cell" data-label="Рекомендуемые">1 ГБ (желательно SSD)</span>
+      </div>
+    </div>
   </section>
 
   <section>
